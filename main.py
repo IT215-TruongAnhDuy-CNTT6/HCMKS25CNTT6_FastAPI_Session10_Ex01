@@ -3,7 +3,7 @@ from pydantic import BaseModel
 from sqlalchemy import create_engine, Column, Integer, String, Float
 from sqlalchemy.orm import declarative_base, sessionmaker
 
-DATABASE_URL = "mysql+pymysql://root:password@localhost:3306/ecommerce_db"
+DATABASE_URL = "mysql+pymysql://root:123456@localhost:3306/ecommerce_db"
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
@@ -21,6 +21,7 @@ class ProductCreate(BaseModel):
     price: float
 
 app = FastAPI()
+Base.metadata.create_all(bind=engine)
 
 @app.post("/products", status_code=status.HTTP_201_CREATED)
 def create_product(product: ProductCreate):
@@ -39,7 +40,7 @@ def create_product(product: ProductCreate):
             "message": "Product prepared successfully", 
             "data": {"sku": new_product.sku, "name": new_product.name}
         }
-    except Exception:
+    except Exception as e:
         raise HTTPException(
             status_code=409,
             detail="Product sku already exists"
