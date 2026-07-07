@@ -1,7 +1,7 @@
 from fastapi import FastAPI, HTTPException, status, Depends
 from pydantic import BaseModel
 from sqlalchemy import create_engine, Column, Integer, String, Float
-from sqlalchemy.orm import declarative_base, sessionmaker, Session
+from sqlalchemy.orm import declarative_base, sessionmaker
 
 DATABASE_URL = "mysql+pymysql://root:password@localhost:3306/ecommerce_db"
 engine = create_engine(DATABASE_URL)
